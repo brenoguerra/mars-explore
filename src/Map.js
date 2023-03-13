@@ -8,7 +8,7 @@ export default class Map {
   constructor(width /** equal X */, height /** equal Y */) {
     let i = 0;
     for (let x = width; x >= 0; x--) {
-      for (let y = height; y >= 0; y--) {
+      for (let y = 0; y < height + 1; y++) {
         this._coordinates[i++] = [x,y];
       }
     }
