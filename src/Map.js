@@ -1,3 +1,5 @@
+import { SHORT_TAGS as directionShortTags } from './directions.js';
+
 export default class Map {
   _coordinates = [];
   _direction = 'N';
@@ -36,5 +38,37 @@ export default class Map {
 
   getPositionByCoordinates(x, y) {
     return this._position = this._coordinates.findIndex(c => c[0] === parseInt(x) && c[1] === parseInt(y))
+  }
+
+  rotateLeftPosition() {
+    if (this._direction === directionShortTags.NORTH) {
+      this.direction = directionShortTags.WEST
+    } else if (this._direction === directionShortTags.WEST) {
+      this.direction = directionShortTags.SOUTH
+    } else if (this._direction === directionShortTags.SOUTH) {
+      this.direction = directionShortTags.EAST
+    } else if (this._direction === directionShortTags.EAST) {
+      this.direction = directionShortTags.NORTH
+    }
+  }
+
+  rotateRightPosition() {
+    if (this._direction === directionShortTags.NORTH) {
+      this.direction = directionShortTags.EAST
+    } else if (this._direction === directionShortTags.EAST) {
+      this.direction = directionShortTags.SOUTH
+    } else if (this._direction === directionShortTags.SOUTH) {
+      this.direction = directionShortTags.WEST
+    } else if (this._direction === directionShortTags.WEST) {
+      this.direction = directionShortTags.NORTH
+    }
+  }
+
+  walk() {
+    if (this._direction === directionShortTags.NORTH) {
+    } else if (this._direction === directionShortTags.EAST) {
+    } else if (this._direction === directionShortTags.SOUTH) {
+    } else if (this._direction === directionShortTags.WEST) {
+    }
   }
 }

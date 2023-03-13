@@ -1,7 +1,6 @@
 import { createInterface } from 'node:readline'
 import util from 'node:util'
 import Map from './Map.js'
-// import { DIRECTIONS } from './directions'
 
 const readline = createInterface({
   input: process.stdin,
@@ -38,6 +37,27 @@ async function questionInitialPosition() {
     
     map.position = positionIndex
     map.direction = direction
+
+    console.log(map.position)
+    console.log(map.direction)
+
+    questionMovementAction()
+  } catch (err) {
+    console.error('Invalid answer', err)
+  }
+}
+
+async function questionMovementAction() {
+  try {
+    const answer = await question('What is the movement action?\n')
+    const actions = answer.split('')
+
+    actions?.map(action => {
+      console.log({ action })
+      if (action.toUpperCase() === 'L') map.rotateLeftPosition()
+      if (action.toUpperCase() === 'R') map.rotateRightPosition()
+      if (action.toUpperCase() === 'M') map.walk()
+    })
 
     console.log(map.position)
     console.log(map.direction)
