@@ -40,6 +40,10 @@ export default class Map {
     return this._position = this._coordinates.findIndex(c => c[0] === parseInt(x) && c[1] === parseInt(y))
   }
 
+  getPositionByIndex(i) {
+    return this._coordinates[i]
+  }
+
   rotateLeftPosition() {
     if (this._direction === directionShortTags.NORTH) {
       this.direction = directionShortTags.WEST
@@ -65,10 +69,19 @@ export default class Map {
   }
 
   walk() {
+    const currentPosition = this._coordinates[this.position]
+    let newPositionIndex
+
     if (this._direction === directionShortTags.NORTH) {
+      newPositionIndex = this.getPositionByCoordinates(currentPosition[0], currentPosition[1] + 1)
     } else if (this._direction === directionShortTags.EAST) {
+      newPositionIndex = this.getPositionByCoordinates(currentPosition[0] + 1, currentPosition[1])
     } else if (this._direction === directionShortTags.SOUTH) {
+      newPositionIndex = this.getPositionByCoordinates(currentPosition[0], currentPosition[1] - 1)
     } else if (this._direction === directionShortTags.WEST) {
+      newPositionIndex = this.getPositionByCoordinates(currentPosition[0] - 1, currentPosition[1])
     }
+
+    if (newPositionIndex !== -1) this.position = newPositionIndex
   }
 }

@@ -59,7 +59,7 @@ async function questionMovementAction() {
       if (action.toUpperCase() === 'M') map.walk()
     })
 
-    console.log(map.position)
+    console.log(map.getPositionByIndex(map.position))
     console.log(map.direction)
   } catch (err) {
     console.error('Invalid answer', err)
