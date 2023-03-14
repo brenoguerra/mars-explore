@@ -3,63 +3,59 @@ import InitializeSpaceProbeService from '../services/initialize-space-probe-serv
 import MoveSpaceProbeService from '../services/move-space-probe-service.js'
 
 export default class QuestionController {
-  _question
   map
   spaceProbe
-
-  constructor(question) {
-    this._question = question
+  steps = {
+    initializedMap: false,
+    position: false,
+    movements: false,
   }
 
-  async handle() {
-    await this.questionSize()
-  }
-
-  async questionSize() {
+  async handle(input) {
     try {
-      const answer = await this._question('What is map size (x and y)?\n')
-      const [x, y] = answer.split(' ')
+      if (!this.steps.initializedMap) {
+        const [x, y] = input.split(' ')
+        if (!Number(x) || !Number(y)) return console.log('Invalid number')
   
-      const initializeMapService = new InitializeMapService()
-      const { map: mapFromService, spaceProbe: spaceProbeFromService } = initializeMapService.execute({ x, y })
+        const initializeMapService = new InitializeMapService()
+        const { map: mapFromService, spaceProbe: spaceProbeFromService } = initializeMapService.execute({ x, y })
+        this.map = mapFromService
+        this.spaceProbe = spaceProbeFromService
   
-      this.map = mapFromService
-      this.spaceProbe = spaceProbeFromService
+        this.steps.initializedMap = true
+        console.log('Insert the initial position')
+        return;
+      }
       
-      console.log(this.map.coordinates)
-      this.questionInitialPosition();
-    } catch (err) {
-      console.error('Error', err)
-    }
-  }
-
-  async questionInitialPosition() {
-    try {
-      const answer = await this._question('What is initial position (x, y and direction)?\n')
-      const [x, y, direction] = answer.split(' ')
+      if (!this.steps.position) {
+        const [x, y, direction] = input.split(' ')
+        if (!Number(x) || !Number(y)) return console.log('Invalid number')
+      
+        const initializeSpaceProbeService = new InitializeSpaceProbeService(this.map)
+        const { spaceProbe: spaceProbeFromService } = initializeSpaceProbeService.execute({ x, y, direction })
+        this.spaceProbe = spaceProbeFromService
   
-      const initializeSpaceProbeService = new InitializeSpaceProbeService(this.map)
-      const { spaceProbe: spaceProbeFromService } = initializeSpaceProbeService.execute({ x, y, direction })
-      this.spaceProbe = spaceProbeFromService
+        console.log(`${String(this.map.getCoordinatesByIndex(this.spaceProbe.position)).replace(',', ' ')} ${this.spaceProbe.direction}`)
+        console.log('Insert the movements')
+        this.steps.position = true
+        return;
+      }
   
-      console.log(`${this.map.getCoordinatesByIndex(this.spaceProbe.position)} ${this.spaceProbe.direction}`)
-      this.questionMovementAction()
-    } catch (err) {
-      console.error('Error', err)
-    }
-  }
-
-  async questionMovementAction() {
-    try {
-      const answer = await this._question('What is the movement action?\n')
-      const actions = answer.split('')
+      if (!this.steps.movements) {
+        this.steps.movements = true
+        const actions = input.split('')
   
-      const moveSpaceProbeService = new MoveSpaceProbeService(this.map, this.spaceProbe)
-      const { direction, coordinates } = moveSpaceProbeService.execute({ actions })
+        const moveSpaceProbeService = new MoveSpaceProbeService(this.map, this.spaceProbe)
+        const { direction, coordinates } = moveSpaceProbeService.execute({ actions })
+        console.log(`${coordinates[0]} ${coordinates[1]} ${direction}`)
   
-      console.log(`${coordinates[0]} ${coordinates[1]} ${direction}`)
-    } catch (err) {
-      console.error('Error', err)
+        this.steps.position = false
+        this.steps.movements = false
+        console.log('\nInsert the initial position')
+        return;
+      }
+    } catch (error) {
+      console.log(error.message)
     }
   }
 }

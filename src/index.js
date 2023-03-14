@@ -1,16 +1,15 @@
-import { createInterface } from 'node:readline'
-import util from 'node:util'
-import QuestionController from './controllers/question-controller.js'
+import { createInterface } from 'node:readline';
+import QuestionController from './controllers/question-controller.js';
 
 const readline = createInterface({
   input: process.stdin,
   output: process.stdout,
 })
-const question = util.promisify(readline.question).bind(readline)
 
-function initQuests() {
-  const questionController = new QuestionController(question)
-  questionController.handle()
-}
+readline.prompt()
+console.log('What is map size (x and y)?')
+const questionController = new QuestionController()
 
-initQuests()
+readline.on('line', (input) => {
+  questionController.handle(input)
+});
