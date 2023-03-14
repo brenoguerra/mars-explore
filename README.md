@@ -24,3 +24,9 @@ Antes de tudo, é importante saber que caso venha a ser executado os testes, é 
 Como o projeto tem um tratamento de erros que não está da melhor forma e a execução não é feita via chamadas HTTP, isso certa forma dificultou a criação de testes end-to-end e até mesmo uma validação de possíveis cenários de erros e testes falhando. Dado isso, fiz somente testes para validar a entrada e saída de dados, conforme os exemplos enviados na descrição do teste técnico.
 
 Para fazer a execução dos testes, basta executar o comando `npm test`.
+
+## Funcionamento do app
+
+Esse é um exemplo de funcionamento da CLI (command line interface)
+
+![screenshot](https://raw.githubusercontent.com/brenoguerra/mars-explore/master/assets/img.png)
