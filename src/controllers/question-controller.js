@@ -1,6 +1,7 @@
 import InitializeMapService from '../services/initialize-map-service.js'
 import InitializeSpaceProbeService from '../services/initialize-space-probe-service.js'
 import MoveSpaceProbeService from '../services/move-space-probe-service.js'
+import { TAGS_ICON as directionTagsIcon } from '../utils/directions-enum.js'
 
 export default class QuestionController {
   map
@@ -30,9 +31,15 @@ export default class QuestionController {
       if (!this.steps.position) {
         const [x, y, direction] = input.split(' ')
         if (!Number(x) || !Number(y)) return console.log('Invalid number')
+
+        const findDirection = directionTagsIcon[direction.toUpperCase()]
+        if (!findDirection) return console.log('Invalid direction')
+
+       const positionIndex = this.map.getCoordinatesIndex(x, y)
+        if (positionIndex === -1) return console.log('Invalid position')
       
         const initializeSpaceProbeService = new InitializeSpaceProbeService(this.map)
-        const { spaceProbe: spaceProbeFromService } = initializeSpaceProbeService.execute({ x, y, direction })
+        const { spaceProbe: spaceProbeFromService } = initializeSpaceProbeService.execute({ positionIndex, direction })
         this.spaceProbe = spaceProbeFromService
   
         console.log(`${String(this.map.getCoordinatesByIndex(this.spaceProbe.position)).replace(',', ' ')} ${this.spaceProbe.direction}`)
@@ -55,7 +62,7 @@ export default class QuestionController {
         return;
       }
     } catch (error) {
-      console.log(error.message)
+      console.error(error.message)
     }
   }
 }
