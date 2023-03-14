@@ -10,7 +10,7 @@ export default class InitializeSpaceProbeService {
 
   execute({ x, y, direction }) {
     const findDirection = directionTagsIcon[direction.toUpperCase()]
-    if (!findDirection) console.log('Invalid direction')
+    if (!findDirection) return console.log('Invalid direction')
 
     const positionIndex = this._map.getCoordinatesIndex(x, y)
     if (positionIndex === -1) return console.log('Invalid position')
